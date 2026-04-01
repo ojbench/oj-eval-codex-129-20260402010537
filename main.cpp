@@ -7,6 +7,16 @@ struct Value {
     string sv;
 };
 
+static inline bool is_valid_name(const string &s) {
+    if (s.empty()) return false;
+    auto is_alpha = [](char c){ return (c>='a'&&c<='z')||(c>='A'&&c<='Z')||c=='_'; };
+    auto is_alnum = [&](char c){ return is_alpha(c) || (c>='0'&&c<='9'); };
+    if (!is_alpha(s[0])) return false;
+    for (size_t i = 1; i < s.size(); ++i) if (!is_alnum(s[i])) return false;
+    if (s == "int" || s == "string") return false; // reserve keywords
+    return true;
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -54,6 +64,20 @@ int main() {
                 cout << "Invalid operation\n"; 
                 // try to recover by discarding the rest of line value token
                 // but input guarantees parameter count, so skip
+                continue;
+            }
+            if (!is_valid_name(name)) {
+                // need still to consume the value token(s)
+                if (type == "int") {
+                    long long dummy; cin >> dummy; // consume
+                } else if (type == "string") {
+                    string tok; if (cin >> tok) {
+                        if (!tok.empty() && tok.front() == '"' && !(tok.size()>=2 && tok.back()=='"')) {
+                            string more; while (cin >> more) { if (!more.empty() && more.back()=='"') break; }
+                        }
+                    }
+                }
+                cout << "Invalid operation\n";
                 continue;
             }
             if (type == "int") {
@@ -132,42 +156,60 @@ int main() {
         } else if (op == "SelfAdd") {
             string name;
             if (!(cin >> name)) { valid = false; }
-            if (valid) {
-                auto it = table.find(name);
-                if (it == table.end() || it->second.empty()) valid = false;
-                else if (it->second.back().is_int) {
-                    long long inc;
-                    if (!(cin >> inc)) valid = false;
-                    else it->second.back().iv += inc;
+            // Regardless of validity, we must consume the value argument(s)
+            string firstTok;
+            if (!(cin >> firstTok)) {
+                cout << "Invalid operation\n";
+                continue;
+            }
+            auto it = table.find(name);
+            bool hasVar = (it != table.end() && !it->second.empty());
+            if (!hasVar) {
+                // consume generically
+                if (!firstTok.empty() && firstTok.front() == '"' && !(firstTok.size()>=2 && firstTok.back()=='"')) {
+                    string more; while (cin >> more) { if (!more.empty() && more.back()=='"') break; }
+                }
+                cout << "Invalid operation\n";
+                continue;
+            }
+            if (it->second.back().is_int) {
+                // firstTok should be an integer; if it's a quoted string, still consume rest and mark invalid
+                if (!firstTok.empty() && firstTok.front()=='"') {
+                    if (!(firstTok.size()>=2 && firstTok.back()=='"')) { string more; while (cin >> more) { if (!more.empty() && more.back()=='"') break; } }
+                    cout << "Invalid operation\n";
+                    continue;
+                }
+                // parse integer
+                bool oknum = true;
+                try { long long inc = stoll(firstTok); it->second.back().iv += inc; }
+                catch (...) { oknum = false; }
+                if (!oknum) cout << "Invalid operation\n";
+            } else {
+                if (firstTok.empty() || firstTok.front() != '"') {
+                    cout << "Invalid operation\n";
+                    continue;
+                }
+                string content;
+                bool ok = true;
+                if (firstTok.size() >= 2 && firstTok.back() == '"') {
+                    content = firstTok.substr(1, firstTok.size() - 2);
                 } else {
-                    // read quoted string value for self add
-                    string tok;
-                    if (!(cin >> tok)) valid = false;
-                    else {
-                        if (tok.empty() || tok.front() != '"') valid = false;
-                        else {
-                            string content;
-                            if (tok.size() >= 2 && tok.back() == '"') {
-                                content = tok.substr(1, tok.size() - 2);
-                            } else {
-                                content = tok.substr(1);
-                                string more;
-                                bool closed = false;
-                                while (cin >> more) {
-                                    if (!more.empty() && more.back() == '"') {
-                                        content += ' ' + more.substr(0, more.size() - 1);
-                                        closed = true;
-                                        break;
-                                    } else {
-                                        content += ' ' + more;
-                                    }
-                                }
-                                if (!closed) valid = false;
-                            }
-                            if (valid) it->second.back().sv += content;
+                    content = firstTok.substr(1);
+                    string more;
+                    bool closed = false;
+                    while (cin >> more) {
+                        if (!more.empty() && more.back() == '"') {
+                            content += ' ' + more.substr(0, more.size() - 1);
+                            closed = true;
+                            break;
+                        } else {
+                            content += ' ' + more;
                         }
                     }
+                    if (!closed) ok = false;
                 }
+                if (!ok) cout << "Invalid operation\n";
+                else it->second.back().sv += content;
             }
             if (!valid) cout << "Invalid operation\n";
             continue;

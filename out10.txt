@@ -1,0 +1,3 @@
+int_accum:446
+string_accum:scopescopetesttestdata Mcase SJTU ACtest random M M randomtest randomtest profiletestScopecasetestcasecasescopedata
+int_profile:-238
