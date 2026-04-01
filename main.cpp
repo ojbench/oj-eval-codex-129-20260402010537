@@ -14,17 +14,11 @@ int main() {
     int n;
     if (!(cin >> n)) return 0;
 
-    // scopes: each scope has unordered_map name -> Value
-    vector<unordered_map<string, Value>> scopes;
-    scopes.emplace_back(); // global scope
-
-    auto find_var = [&](const string &name) -> pair<int, Value*> {
-        for (int i = (int)scopes.size() - 1; i >= 0; --i) {
-            auto it = scopes[i].find(name);
-            if (it != scopes[i].end()) return {i, &it->second};
-        }
-        return {-1, (Value*)nullptr};
-    };
+    // Use a global symbol table: name -> stack of values for scoping;
+    // And a stack of sets tracking which names were declared in each scope level
+    vector<unordered_set<string>> scope_declared;
+    scope_declared.emplace_back(); // global scope
+    unordered_map<string, vector<Value>> table; // name -> stack of Values
 
     string op;
     string tmp;
@@ -33,12 +27,20 @@ int main() {
         bool valid = true;
 
         if (op == "Indent") {
-            scopes.emplace_back();
+            scope_declared.emplace_back();
             // no output
             continue;
         } else if (op == "Dedent") {
-            if (scopes.size() > 1) {
-                scopes.pop_back();
+            if (scope_declared.size() > 1) {
+                // pop all names declared in this scope from table
+                for (const auto &name : scope_declared.back()) {
+                    auto it = table.find(name);
+                    if (it != table.end() && !it->second.empty()) {
+                        it->second.pop_back();
+                        if (it->second.empty()) table.erase(it);
+                    }
+                }
+                scope_declared.pop_back();
             } else {
                 // cannot dedent beyond global
                 valid = false;
@@ -58,10 +60,13 @@ int main() {
                 long long v; 
                 if (!(cin >> v)) { valid = false; }
                 else {
-                    // can declare shadowing in same scope? In C++ cannot redeclare, but problem states if name not defined in current scope, then can define. It does not clarify error on redeclare; we treat redeclare in same scope as invalid.
-                    auto &cur = scopes.back();
-                    if (cur.find(name) != cur.end()) valid = false;
-                    else cur[name] = Value{true, v, string()};
+                    // cannot redeclare in the same scope
+                    auto &curset = scope_declared.back();
+                    if (curset.find(name) != curset.end()) valid = false;
+                    else {
+                        curset.insert(name);
+                        table[name].push_back(Value{true, v, string()});
+                    }
                 }
             } else if (type == "string") {
                 // robustly read a quoted string, which may include spaces but has no escapes
@@ -91,9 +96,12 @@ int main() {
                             if (!closed) valid = false;
                         }
                         if (valid) {
-                            auto &cur = scopes.back();
-                            if (cur.find(name) != cur.end()) valid = false;
-                            else cur[name] = Value{false, 0, content};
+                            auto &curset = scope_declared.back();
+                            if (curset.find(name) != curset.end()) valid = false;
+                            else {
+                                curset.insert(name);
+                                table[name].push_back(Value{false, 0, content});
+                            }
                         }
                     }
                 }
@@ -106,16 +114,16 @@ int main() {
             string res, v1, v2;
             if (!(cin >> res >> v1 >> v2)) { valid = false; }
             if (valid) {
-                auto pr = find_var(res);
-                auto p1 = find_var(v1);
-                auto p2 = find_var(v2);
-                if (pr.second == nullptr || p1.second == nullptr || p2.second == nullptr) valid = false;
-                else if (pr.second->is_int != p1.second->is_int || pr.second->is_int != p2.second->is_int) valid = false;
+                auto itR = table.find(res);
+                auto it1 = table.find(v1);
+                auto it2 = table.find(v2);
+                if (itR == table.end() || itR->second.empty() || it1 == table.end() || it1->second.empty() || it2 == table.end() || it2->second.empty()) valid = false;
+                else if (itR->second.back().is_int != it1->second.back().is_int || itR->second.back().is_int != it2->second.back().is_int) valid = false;
                 else {
-                    if (pr.second->is_int) {
-                        pr.second->iv = p1.second->iv + p2.second->iv;
+                    if (itR->second.back().is_int) {
+                        itR->second.back().iv = it1->second.back().iv + it2->second.back().iv;
                     } else {
-                        pr.second->sv = p1.second->sv + p2.second->sv;
+                        itR->second.back().sv = it1->second.back().sv + it2->second.back().sv;
                     }
                 }
             }
@@ -125,12 +133,12 @@ int main() {
             string name;
             if (!(cin >> name)) { valid = false; }
             if (valid) {
-                auto pv = find_var(name);
-                if (pv.second == nullptr) valid = false;
-                else if (pv.second->is_int) {
+                auto it = table.find(name);
+                if (it == table.end() || it->second.empty()) valid = false;
+                else if (it->second.back().is_int) {
                     long long inc;
                     if (!(cin >> inc)) valid = false;
-                    else pv.second->iv += inc;
+                    else it->second.back().iv += inc;
                 } else {
                     // read quoted string value for self add
                     string tok;
@@ -156,7 +164,7 @@ int main() {
                                 }
                                 if (!closed) valid = false;
                             }
-                            if (valid) pv.second->sv += content;
+                            if (valid) it->second.back().sv += content;
                         }
                     }
                 }
@@ -167,11 +175,11 @@ int main() {
             string name;
             if (!(cin >> name)) { valid = false; }
             if (valid) {
-                auto pv = find_var(name);
-                if (pv.second == nullptr) valid = false;
+                auto it = table.find(name);
+                if (it == table.end() || it->second.empty()) valid = false;
                 else {
-                    if (pv.second->is_int) cout << name << ':' << (long long)pv.second->iv << '\n';
-                    else cout << name << ':' << pv.second->sv << '\n';
+                    if (it->second.back().is_int) cout << name << ':' << (long long)it->second.back().iv << '\n';
+                    else cout << name << ':' << it->second.back().sv << '\n';
                 }
             }
             if (!valid) cout << "Invalid operation\n";
