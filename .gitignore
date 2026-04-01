@@ -1,0 +1,12 @@
+CMakeFiles/
+CMakeCache.txt
+code
+*.o
+*.obj
+*.exe
+build/
+cmake-build-*/
+.vscode/
+.idea/
+
+# tmp_scope is only for local reference
