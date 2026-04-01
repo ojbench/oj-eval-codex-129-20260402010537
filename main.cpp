@@ -13,7 +13,6 @@ static inline bool is_valid_name(const string &s) {
     auto is_alnum = [&](char c){ return is_alpha(c) || (c>='0'&&c<='9'); };
     if (!is_alpha(s[0])) return false;
     for (size_t i = 1; i < s.size(); ++i) if (!is_alnum(s[i])) return false;
-    if (s == "int" || s == "string") return false; // reserve keywords
     return true;
 }
 

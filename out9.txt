@@ -1,0 +1,42 @@
+int_accum:681
+string_accum:datadatatest profile AC M profile M ACbenchtestScope SJTU MbenchcaseScope SJTU ACscopetestbench random randomScope M M AC randomdatatestscopecaseScopedatadatacasedataScopebench Mtest randomdatatesttestcase
+int_accum:-22
+string_accum:testbenchdataScopetestcase AC M profile profile ACscopeScope MdataScope SJTUbench Mscope SJTU randomdataScopeScopescopeScope AC profile Mcasedatadata M AC M SJTUcasetest randomcase profile Mscope Mbench profilebenchscope SJTUscope Mbench ACdata AC ACtestcase SJTUtestbench SJTU M randombenchbench profile
+int_accum:-187
+string_accum:test profile M SJTU ACScopebench AC
+int_accum:-135
+string_accum:scopecase profile profilebenchScope SJTU ACcasescopescopetestScope profile profile AC ACcasebenchscope random ACtest randomscopebench ACdatadatadata AC Mtest SJTU profiledata random profile random randombench profile SJTUtestscope randomtest randombenchdata AC SJTU SJTUtestbenchbenchbench M SJTU SJTU profile Mcase random randomScope AC randombench AC ACtest MscopeScopedatabenchtest AC SJTUscopebenchdatacase random SJTU SJTUdata random profilescopecasebenchtest ACcase M randomscopecase randomdata AC randomdata SJTUcase M randomcase profileScope
+int_accum:322
+string_accum: profilecasebench random profiledatascopescope randomscopebench AC ACscope ACbench randombenchScope Mdata random randomscopebenchtesttestScopescope randomtestScope randombench ACdata M randomtestdatadatascope
+int_accum:767
+string_accum: SJTUbenchdatabenchdatabenchcase randomdatabenchScopecase AC randombench AC ACtest MscopeScopedatabenchtest AC SJTUscopebenchdatacase random SJTU SJTUdata random profilescopecasebenchtest ACcase M randomscopecase randomdata AC randomdata SJTUcase M randomcase profileScopedatacasedatabench ACscopetest profilebench M random SJTU random profilecase ACcase M randomtest randomcasebench profileScope
+int_accum:-403
+string_accum: SJTUdata SJTUtestcasebenchScopetestscopecasescopebench McaseScope ACtest SJTU profiletest random profile ACbenchscopebenchbenchScope AC M profiletesttestbenchdatascope SJTU randomscope randomscope profile SJTU SJTUtest AC profile AC SJTUcasebenchScope AC profile SJTU AC randomscopedatacase
+int_accum:1076
+string_accum: profilescope ACbench AC AC ACdata randomScope AC
+int_accum:-445
+string_accum:test random M randomcase AC random M profiledataScopebench randombenchbenchbench AC M profilescopetest randomScopetestbench randomdata random randomscopeScopescopecase SJTUdata random random SJTUScope profile SJTU profilebenchtest Mdatatest SJTU profiledatascopedata SJTUscopebenchScopecase random randombenchdatabench random AC SJTU Mdatacase M randomcasecase AC AC Mdata MScopetest randomscope profile SJTUbenchcasetest AC M profile profile M random AC ACScopescope M M M profileScopescope randomcasescopetest ACbenchScopescopebenchscopescopedatatestbenchtestcase M SJTUcase
+int_accum:-568
+string_accum:datascope SJTUcasebench SJTUdatabenchcase M MScopedata Mbench M profile random M random profilebench M randomtestbench SJTUbench profile randomscopedata ACScopecasescope random
+int_accum:6
+string_accum: AC randomscopebench SJTU M ACcasecase SJTUdata M AC AC SJTUbench profile ACtest profiledatascopetestdata profile random M M SJTU profile randomtest SJTU profile randomdatabench SJTU MScopedatatest
+int_accum:-421
+string_accum: randomscopecase ACtestscopedata profile SJTUtest ACcasecasebenchtest M ACbenchtest profilescopedataScopedata SJTUscope AC randomdataScopedatacaseScopeScopescopedata ACcasetest AC SJTU profiletestbench SJTUbench random MScopescopecasecasecase ACcasetestScopedataScopetestcase SJTUscope Mcase Mbench SJTUcase ACcasecaseScopeScopeScopetest AC SJTU
+int_accum:-105
+string_accum:Scopescopetestdata M SJTU profiledata Mcasecase ACscopedatadatatest random randomcase profilescope Mcasecasebenchscopedatadatatestscope AC M randomcasedatabench SJTUtestscopescope M MScope profilescope profilebenchcaseScope AC SJTU SJTUtesttestbench profile random
+int_accum:521
+string_accum:data profile SJTUScopedatascope
+int_accum:475
+string_accum: AC SJTU SJTU M random profile SJTU profile Mtest SJTUcase SJTUbench SJTUbench random M random SJTU AC SJTUdatatest SJTUdata SJTU ACscopebench profiletest
+int_accum:595
+string_accum: randombenchtestbenchscope ACdatascope SJTUcasebench SJTUdata AC SJTU SJTU SJTU profilescope AC profilescopetestcase SJTU AC random AC AC profile profileScopeScope SJTU profile random
+int_accum:412
+string_accum:datadatatestScope Mbenchdata random ACscopedatatest SJTUdata random random SJTU profilecasetestdatadatacase ACtesttest profilecase profile Mcase Mbenchtestbench M profilescope AC M SJTUScopebenchbenchScope profile
+int_accum:-94
+string_accum:testtest SJTUtest profilecasedata AC M M profileScopescope SJTU randomcasedata Mbench profile profilebenchScope randomScope randombench AC random MtestdataScope random AC profilecase random profile randombench SJTUcase randomdata Mbench profile profilescopebench SJTU random SJTU profile SJTUbench
+int_accum:269
+string_accum: randomtestbench SJTU profiledatabench SJTU M SJTU SJTUScopebench SJTUbench SJTU randomscopebench profile M profile SJTU randomdata SJTUbench random Mtestcasedata SJTUbenchcasetestcasedatabenchdatascopedataScopebenchScope ACscopecase Mtest Mtest Mscope random Mscope profile profileScopedatacase profileScopetest Mcasecasescope ACtesttestdatacaseScope profile SJTU random SJTUscopetest profile AC random AC McaseScopescopescope SJTU SJTU profileScope profilecase
+int_accum:-206
+string_accum:scope ACScopescopecasebenchtest profile SJTUScope M AC Mcasetestdata ACScopeScopeScope ACtest McaseScopeScope AC profile randomscopebenchdata Mtestcase Mbench Mtest random SJTUbenchdata SJTU M AC MScope Mtestbench Mtest SJTUcase profilecase M Mscope AC ACdatascopecasescopebenchcase randomScope SJTUcasetestscope AC profiledata randomScopetestcaseScopeScopecase profile SJTUcase ACscope M profile M profilebench MScopetest M M SJTUbench M AC M Mdata profileScopebench randomscope M SJTU
+root_counter:-158
+string_mix:case M M random Mbenchbench random McaseScope AC SJTUscopeScopeScopeScopescope profile AC randomScopedata M
