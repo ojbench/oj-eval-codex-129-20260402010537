@@ -1,0 +1,11 @@
+CMakeFiles/
+CMakeCache.txt
+code
+*.o
+*.obj
+*.exe
+build/
+cmake-build-*/
+.vscode/
+.idea/
+
