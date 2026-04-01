@@ -64,19 +64,37 @@ int main() {
                     else cur[name] = Value{true, v, string()};
                 }
             } else if (type == "string") {
-                // read a quoted string token possibly with spaces? The problem states value is a string constant in quotes without escapes and input tokens are space-separated; sample shows strings without spaces like "SJTU" or with spaces? Public data shows many strings like " profile" with leading space inside quotes.
-                // But since input uses whitespace separators, strings will be a single token with embedded spaces? Not possible. Observed public data shows tokens like " profile" including space inside quotes: but read via >> would read as " since spaces split tokens. However, they include space immediately after opening quote? Actually token is " profile" (with space after opening quote) still a single token since includes no spaces outside quotes in file. The space is inside the quotes but the token is contiguous including quotes and preceding spaces are part of token. Using operator>> will read the whole token including quotes.
-                string tok; 
+                // robustly read a quoted string, which may include spaces but has no escapes
+                // We get the next token; if it starts with '"' and ends without '"', keep reading and appending with spaces until closing quote
+                string tok;
                 if (!(cin >> tok)) { valid = false; }
                 else {
-                    // token starts with '"' and ends with '"'
-                    if (tok.size() >= 2 && tok.front() == '"' && tok.back() == '"') {
-                        string content = tok.substr(1, tok.size() - 2);
-                        auto &cur = scopes.back();
-                        if (cur.find(name) != cur.end()) valid = false;
-                        else cur[name] = Value{false, 0, content};
-                    } else {
-                        valid = false;
+                    if (tok.empty() || tok.front() != '"') { valid = false; }
+                    else {
+                        string content;
+                        if (tok.size() >= 2 && tok.back() == '"') {
+                            content = tok.substr(1, tok.size() - 2);
+                        } else {
+                            content = tok.substr(1);
+                            string more;
+                            bool closed = false;
+                            while (cin >> more) {
+                                if (!more.empty() && more.back() == '"') {
+                                    // closing
+                                    content += ' ' + more.substr(0, more.size() - 1);
+                                    closed = true;
+                                    break;
+                                } else {
+                                    content += ' ' + more;
+                                }
+                            }
+                            if (!closed) valid = false;
+                        }
+                        if (valid) {
+                            auto &cur = scopes.back();
+                            if (cur.find(name) != cur.end()) valid = false;
+                            else cur[name] = Value{false, 0, content};
+                        }
                     }
                 }
             } else {
@@ -114,11 +132,33 @@ int main() {
                     if (!(cin >> inc)) valid = false;
                     else pv.second->iv += inc;
                 } else {
+                    // read quoted string value for self add
                     string tok;
                     if (!(cin >> tok)) valid = false;
-                    else if (tok.size() >= 2 && tok.front() == '"' && tok.back() == '"') {
-                        pv.second->sv += tok.substr(1, tok.size() - 2);
-                    } else valid = false;
+                    else {
+                        if (tok.empty() || tok.front() != '"') valid = false;
+                        else {
+                            string content;
+                            if (tok.size() >= 2 && tok.back() == '"') {
+                                content = tok.substr(1, tok.size() - 2);
+                            } else {
+                                content = tok.substr(1);
+                                string more;
+                                bool closed = false;
+                                while (cin >> more) {
+                                    if (!more.empty() && more.back() == '"') {
+                                        content += ' ' + more.substr(0, more.size() - 1);
+                                        closed = true;
+                                        break;
+                                    } else {
+                                        content += ' ' + more;
+                                    }
+                                }
+                                if (!closed) valid = false;
+                            }
+                            if (valid) pv.second->sv += content;
+                        }
+                    }
                 }
             }
             if (!valid) cout << "Invalid operation\n";
@@ -146,4 +186,3 @@ int main() {
     }
     return 0;
 }
-
